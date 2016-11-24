@@ -287,7 +287,10 @@ class AuthorizeController implements AuthorizeControllerInterface
     private function buildUri($uri, $params)
     {
         $parse_url = parse_url($uri);
-
+        if (!$parse_url) {
+            // Because we may be working with a custom schema that can't be parsed with parse_url
+            $parse_url = array('path' => $uri);
+        }
         // Add our params to the parsed uri
         foreach ($params as $k => $v) {
             if (isset($parse_url[$k])) {
